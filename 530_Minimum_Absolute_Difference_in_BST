@@ -1,0 +1,60 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public int getMinimumDifference(TreeNode root) {
+        
+        //i think if we do a dfs traversal first and then
+        LinkedList<TreeNode> stack = new LinkedList<TreeNode>();
+        
+        int min  = Integer.MAX_VALUE;
+        
+        //first, fill the stack
+        //also, keep going till we reach the left end of tree
+        TreeNode curr = root;
+        while(curr!=null)
+        {
+            stack.addFirst(curr);
+            curr=curr.left;
+        }
+        
+        int lastval = Integer.MAX_VALUE;
+        
+        while(stack.size()>0)
+        {
+            //whenever we pop from the stack here
+            //we get a node which
+            //1. the smallest node compared to all nodes afterwards
+            //2. also, it may or may not have a right child
+            //3. left child has been processed
+            curr =  stack.removeFirst();
+            int diff = Math.abs(curr.val - lastval);
+            
+            //we can process serially in inorder fashion because the absolute diff 
+            //minium one can be found when processing sorted list 
+            if(diff<min)
+                min=diff;
+                
+            lastval = curr.val;
+            
+            
+            curr = curr.right;
+            while(curr!=null)
+            {
+                stack.addFirst(curr);
+                curr=curr.left;
+            }
+            
+            
+        }
+        
+        
+        return min;    
+    }
+}
